@@ -550,7 +550,7 @@ body.reduced .scroll-hint{display:none}
   var panels  = Array.prototype.slice.call(document.querySelectorAll('.hero-panel'));
   var hint    = document.getElementById('scrollHint');
 
-  var FRAME_COUNT = 121;                       // frames in video/frames/
+  var FRAME_COUNT = 241;                       // frames in video/frames/
   function framePath(n){ return 'video/frames/f_' + ('00'+n).slice(-3) + '.jpg'; }
   var images = new Array(FRAME_COUNT);
   var loadedCount = 0;
@@ -589,6 +589,7 @@ body.reduced .scroll-hint{display:none}
     var h = canvas.clientHeight || window.innerHeight;
     canvas.width  = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
+    ctx.imageSmoothingQuality = 'medium';      // reset after canvas resize
     forceDraw();
   }
   function drawCover(img){
@@ -610,18 +611,26 @@ body.reduced .scroll-hint{display:none}
     }
   }
 
-  /* ---- preload all frames (frame 1 first) ---- */
+  /* ---- preload + pre-decode all frames ----
+     decode() is the key to smoothness: it forces the browser to decode the JPEG
+     ahead of time, so drawImage() during scroll never blocks on a synchronous
+     decode (which is what made the scrub stutter). */
   function preload(){
     for(var i=0;i<FRAME_COUNT;i++){
       (function(i){
         var im = new Image();
         im.decoding = 'async';
-        im.onload = function(){ loadedCount++; needsDraw = true; };
+        im.onload = function(){
+          loadedCount++;
+          if(im.decode){ im.decode().then(markReady, markReady); }
+          else { markReady(); }
+        };
         im.src = framePath(i+1);   // files are 1-indexed
         images[i] = im;
       })(i);
     }
   }
+  function markReady(){ needsDraw = true; }
 
   var targetFrame = 0, smoothFrame = 0, lastIdx = -1, needsDraw = true;
   function forceDraw(){ lastIdx = -1; needsDraw = true; }
