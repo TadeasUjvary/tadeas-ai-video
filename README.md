@@ -1,8 +1,8 @@
 # Tadeáš Ujváry — AI video & reklama
 
 Osobní landing page prezentující tvorbu **komerčních reklam a videí pomocí AI**.
-Pohlcující hero se scroll-řízeným videem (AirPods), čistý light-minimal editorial styl
-a reálné ukázky „z fotky → hotové video".
+Celá stránka stojí na ukázkách „před → po": velký výsledek, v jeho rohu původní
+packshot, který přišel od klienta.
 
 > **Stack:** čisté HTML + CSS + vanilla JS. Žádný build, žádné závislosti. Jeden soubor `index.html`.
 
@@ -10,16 +10,16 @@ a reálné ukázky „z fotky → hotové video".
 
 ## ✨ Co stránka umí
 
-- **Scroll-driven hero** — video se „přehrává" podle scrollu. Technicky jde o **canvas
-  image-sequence** (snímky z videa se vykreslují na `<canvas>` podle pozice scrollu).
-  Je to spolehlivé napříč všemi prohlížeči i přes `file://` — na rozdíl od seekování
-  `<video>.currentTime`, které v některých prohlížečích zlobí.
-- **Textové panely** v hero se plynule prolínají podle progressu scrollu.
-- **Sekce „Jak to funguje — na příkladech"** — dvě reálné before/after dvojice
-  (AirPods a Rituals: *fotka → AI video*) + bonusové UGC video.
+- **Hero koláž** — tři výstupy (vizuál, spot 9:16, vizuál) přeložené přes sebe, s jednou
+  bílou destičkou „VSTUP", která ukazuje, z čeho se vycházelo.
+- **Sekce „Před → po"** — sedm ukázek v masonry mřížce (CSS `columns`). Každá karta =
+  velké médium s výstupem + vsazený náhled vstupní fotky vlevo dole (na hover se zvětší).
+- **Líné video** — všech osm videí má `preload="none"` + poster; zdroj se načte a spustí
+  teprve když karta doscrolluje do viewportu, a při odscrollování se pauzuje.
 - **Služby, proces, statistiky** v editorial layoutu.
 - **Kontakt** — e-mail, telefon a formulář (odešle se přes `mailto:`).
 - Plně **responzivní**, podpora `prefers-reduced-motion`, progress bar, scroll-reveal animace.
+  Reveal se aktivuje až po `html.js`, takže při chybě JS se obsah pořád zobrazí.
 
 ---
 
@@ -27,7 +27,7 @@ a reálné ukázky „z fotky → hotové video".
 
 | | |
 |---|---|
-| Akcentová zelená | `#2F9550` (odpipetovaná přímo z videa) |
+| Akcentová zelená | `#2F9550` |
 | Ink / text | `#0c1410` |
 | Papír / pozadí | `#f6f7f4` |
 | Fonty | Inter (UI/text) + Instrument Serif (italic akcenty) |
@@ -39,62 +39,62 @@ a reálné ukázky „z fotky → hotové video".
 ```
 tadeas-web/
 ├── index.html              # celá stránka (HTML + CSS + JS)
-├── video/
-│   ├── frames/             # 121 snímků hero videa (f_001.jpg … f_121.jpg) – canvas scrub
-│   ├── airpods.mp4         # hero video (all-intra) + výstup v ukázce
-│   ├── airpods-photo.jpg   # vstupní fotka AirPods (before)
-│   ├── rituals.mp4         # AI video šamponu Rituals (výstup)
-│   ├── rituals-photo.jpg   # vstupní fotka Rituals (before)
-│   ├── ugc-ref.mp4         # UGC referenční video
-│   ├── poster.jpg          # OG/náhledový obrázek
+├── work/                   # ukázky před → po
+│   ├── protein-in.jpg      │ protein-out.jpg        (fotka → vizuál)
+│   ├── monaco-in.jpg       │ monaco-out.jpg         (fotka → vizuál)
+│   ├── lampa-in.jpg        │ lampa-out.mp4          (fotka → video)
+│   ├── duolife-in.jpg      │ duolife-out.mp4        (packshot → animovaný spot)
+│   ├── vitestin-in.jpg     │ vitestin-out.mp4       (fotka → video)
 │   └── *-poster.jpg        # postery k videím
+├── video/                  # starší ukázky
+│   ├── airpods-photo.jpg   │ airpods.mp4 + poster.jpg
+│   ├── rituals-photo.jpg   │ rituals.mp4 + rituals-poster.jpg
+│   └── ugc-ref.mp4 + ugc-poster.jpg
 └── README.md
 ```
+
+Vstupní packshoty se ukládají jako JPEG se **zploštělou bílou** — v mřížce sedí na bílé
+destičce, takže průhlednost není potřeba a soubor je řádově menší.
 
 ---
 
 ## 🚀 Spuštění lokálně
 
-Stačí jakýkoliv statický server (kvůli načítání snímků hero videa):
-
 ```bash
-# Python
 python3 -m http.server 8785
-# → http://localhost:8785
-
-# nebo npx
-npx serve .
 ```
 
-> Pozn.: otevření `index.html` napřímo (`file://`) funguje taky, ale přes server je to korektnější
-> (caching, range requesty).
+→ http://localhost:8785 (otevření přes `file://` funguje taky)
 
 ## ☁️ Nasazení
 
-Statický web → ideální pro **Vercel / Netlify / GitHub Pages**.
-Na Vercelu stačí `Import Project` z tohoto repa, bez nastavování (žádný build).
+Statický web → Vercel projekt `ujvary-studio`, bez buildu.
 
 ---
 
-## 🔧 Jak přidat / vyměnit média
+## 🔧 Jak přidat další ukázku
 
-**Nová before/after dvojice** = produktová fotka (`*-photo.jpg`) + AI video (`*.mp4`).
-Video pro web odlehči (bez zvuku, faststart):
-
-```bash
-ffmpeg -i zdroj.mp4 -an -c:v libx264 -crf 28 -preset slow \
-  -movflags +faststart -pix_fmt yuv420p video/nove.mp4
-```
-
-**Regenerace snímků hero videa** (canvas scrub) — každý 2. snímek, 1280×720:
+Potřebuješ dvojici: vstupní packshot + výstup (obrázek nebo video).
 
 ```bash
-ffmpeg -i video/airpods.mp4 \
-  -vf "select='not(mod(n\,2))',scale=1280:720" -fps_mode vfr -q:v 5 \
-  video/frames/f_%03d.jpg
+# vstupní packshot: zploštit průhlednost na bílou, zmenšit
+ffmpeg -i pred.png -vf "scale=-2:1100:force_original_aspect_ratio=decrease,\
+format=rgba,split[a][b];[a]drawbox=c=white@1:t=fill[bg];[bg][b]overlay=format=auto,\
+format=yuv420p" -q:v 4 work/nazev-in.jpg
+
+# výstupní vizuál
+ffmpeg -i po.png -vf "scale=1500:-2" -q:v 4 work/nazev-out.jpg
+
+# výstupní video: bez zvuku, faststart, poster z 1. sekundy
+ffmpeg -i po.mp4 -an -c:v libx264 -preset slow -crf 28 -vf "scale=980:-2" \
+  -pix_fmt yuv420p -movflags +faststart -profile:v main work/nazev-out.mp4
+ffmpeg -ss 1 -i work/nazev-out.mp4 -frames:v 1 -q:v 5 work/nazev-poster.jpg
 ```
 
-Pokud změníš počet snímků, uprav `FRAME_COUNT` v `index.html`.
+Pak zkopíruj v `index.html` blok `<article class="case">`, přepiš cesty, popisek a
+`aspect-ratio` na `.case-media` (poměr **výstupního** média).
+
+> Má-li zdroj bílé pruhy (letterbox), ořízni je před škálováním: `crop=Š:V:0:Y`.
 
 ---
 
