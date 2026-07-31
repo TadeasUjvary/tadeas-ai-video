@@ -195,14 +195,32 @@ h1.hero-h{
 .case-cap h3{font-size:1.05rem;font-weight:600;letter-spacing:-.01em}
 .case-cap span{font-size:.85rem;color:var(--muted);white-space:nowrap}
 
-/* ---------------- UGC ---------------- */
-.ugc-row{display:grid;grid-template-columns:.55fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;margin-top:clamp(40px,6vw,72px)}
-.ugc-media{border-radius:clamp(16px,2vw,24px);overflow:hidden;background:var(--ink);aspect-ratio:3/4;position:relative;
-  box-shadow:0 30px 60px -40px rgba(12,20,16,.55)}
+/* ---------------- UGC ----------------
+   Wrapped in its own dark panel: as a bare two-up it read as loose text
+   floating next to a video and bled into the section heading below it. */
+.ugc-row{
+  display:grid;grid-template-columns:minmax(0,.4fr) 1fr;
+  gap:clamp(22px,3.4vw,52px);align-items:center;
+  margin-top:clamp(44px,6vw,76px);
+  background:var(--ink);color:#fff;
+  border-radius:clamp(20px,2.4vw,30px);
+  padding:clamp(18px,2.2vw,26px);
+}
+.ugc-media{border-radius:clamp(12px,1.6vw,18px);overflow:hidden;background:#000;aspect-ratio:3/4;position:relative}
 .ugc-media video{width:100%;height:100%;object-fit:cover}
-.ugc-text h3{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
-.ugc-text p{font-size:clamp(1.02rem,1.7vw,1.2rem);color:var(--muted);line-height:1.55;max-width:44ch}
-@media(max-width:760px){.ugc-row{grid-template-columns:1fr;gap:22px}.ugc-media{max-width:300px}}
+.ugc-text{padding-right:clamp(0px,2vw,32px)}
+.ugc-text h3{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
+.ugc-text p{font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(255,255,255,.72);line-height:1.55;max-width:40ch}
+.ugc-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.ugc-tags span{font-size:12.5px;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.22);
+  padding:6px 12px;border-radius:999px}
+@media(max-width:760px){
+  .ugc-row{grid-template-columns:1fr;gap:20px}
+  .ugc-media{max-width:280px;margin-inline:auto;width:100%}
+  .ugc-text{padding:0 6px 8px;text-align:center}
+  .ugc-text p{margin-inline:auto}
+  .ugc-tags{justify-content:center}
+}
 
 /* ---------------- SERVICES ---------------- */
 .svc-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:56px}
@@ -435,6 +453,7 @@ h1.hero-h{
         <div class="ugc-text">
           <h3>Nejen produkty.</h3>
           <p>Zvládnu i UGC a mluvená videa pro sociální sítě — autentický styl, který funguje na Reels a TikToku.</p>
+          <div class="ugc-tags"><span>UGC</span><span>Mluvené video</span><span>Reels &amp; TikTok</span><span>9:16</span></div>
         </div>
       </div>
     </div>
