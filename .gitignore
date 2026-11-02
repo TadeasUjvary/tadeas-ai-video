@@ -6,3 +6,5 @@
 /hf_*.mp4
 /Screenshot*.png
 .vercel
+
+.wrangler/
