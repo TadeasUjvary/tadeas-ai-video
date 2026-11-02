@@ -288,7 +288,7 @@ h1.hero-h{
 .contact{background:var(--emerald-deep);color:#fff;border-radius:clamp(24px,3vw,40px);padding:clamp(48px,7vw,100px) var(--pad);position:relative;overflow:hidden}
 .contact::before{content:"";position:absolute;width:520px;height:520px;right:-160px;top:-160px;border-radius:50%;
   background:radial-gradient(circle,rgba(57,180,99,.55),transparent 70%);filter:blur(20px)}
-.contact .inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,5vw,80px)}
+.contact .inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1fr;gap:clamp(40px,5vw,80px)}
 .contact h2{font-size:clamp(2.2rem,5.5vw,4.2rem);line-height:1;font-weight:800;letter-spacing:-.035em}
 .contact .lead{color:rgba(255,255,255,.85);max-width:42ch}
 .contact-methods{display:flex;flex-direction:column;gap:8px;margin-top:36px}
@@ -611,6 +611,9 @@ h1.hero-h{
           <a href="https://www.vitestin.cz" target="_blank" rel="noopener"><img src="logos/vitestin.png" alt="Vitestin — Natura Imuneco" loading="lazy"></a>
           <a href="https://drjungle.cz" target="_blank" rel="noopener"><img src="logos/drjungle.png" alt="Dr. Jungle" loading="lazy"></a>
           <a href="https://www.jsemfit.cz" target="_blank" rel="noopener"><img src="logos/jsemfit.svg" alt="Jsem Fit" loading="lazy"></a>
+          <a href="https://www.autodilos.cz" target="_blank" rel="noopener"><img src="logos/autodilos.jpg" alt="Autodílos" loading="lazy"></a>
+          <img src="logos/ordinace.png" alt="Ordinace Čekárny" loading="lazy">
+          <a href="https://www.autostojcin.cz" target="_blank" rel="noopener"><img src="logos/stojcin.png" alt="Auto Stojčín" loading="lazy"></a>
         </div>
       </div>
     </div>
@@ -636,22 +639,6 @@ h1.hero-h{
               </a>
             </div>
           </div>
-
-          <form class="form-card" id="contactForm">
-            <div class="field">
-              <label for="cf-name">Jméno</label>
-              <input id="cf-name" name="name" type="text" placeholder="Jak vám mám říkat?" required>
-            </div>
-            <div class="field">
-              <label for="cf-email">Váš email</label>
-              <input id="cf-email" name="email" type="email" placeholder="vas@email.cz" required>
-            </div>
-            <div class="field">
-              <label for="cf-msg">O co jde?</label>
-              <textarea id="cf-msg" name="msg" placeholder="Produkt, cíl, termín…" required></textarea>
-            </div>
-            <button type="submit">Odeslat poptávku →</button>
-          </form>
         </div>
       </div>
 
@@ -721,19 +708,6 @@ h1.hero-h{
   },{threshold:0.2, rootMargin:'150px 0px'});
   vids.forEach(function(v){ vio.observe(v); });
 
-  /* ---- contact form -> mailto ---- */
-  var form = document.getElementById('contactForm');
-  if(form){
-    form.addEventListener('submit', function(ev){
-      ev.preventDefault();
-      var name = document.getElementById('cf-name').value.trim();
-      var email = document.getElementById('cf-email').value.trim();
-      var msg = document.getElementById('cf-msg').value.trim();
-      var subject = encodeURIComponent('Poptávka videa — ' + (name||'web'));
-      var body = encodeURIComponent('Jméno: '+name+'\nEmail: '+email+'\n\n'+msg);
-      window.location.href = 'mailto:taujvyk@gmail.com?subject='+subject+'&body='+body;
-    });
-  }
 })();
 </script>
 </body>
